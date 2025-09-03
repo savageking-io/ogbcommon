@@ -64,3 +64,13 @@ func Populate(db *sqlx.DB, filepath string) error {
 	}
 	return nil
 }
+
+func VerifyTables(tableList []string, db *sqlx.DB) error {
+	for _, table := range tableList {
+		if _, err := db.Exec("SELECT 1 FROM " + table + " LIMIT 1"); err != nil {
+			return fmt.Errorf("failed to verify table %s: %w", table, err)
+		}
+	}
+
+	return nil
+}
